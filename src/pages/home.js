@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { CircularProgress, Container, Grid } from '@material-ui/core';
+import { CircularProgress, Container } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 
 import Header from '../components/header';
@@ -30,14 +30,16 @@ const {
   // setPokemonID,
 } = PokemonActions;
 
-export default function Home() {
-  const [apiUrl, setApiUrl] = useState('https://pokeapi.co/api/v2/pokemon');
+export default function Home(props) {
   const [metaPokemonList, setMetaPokemonList] = useState({
     count: 0,
     offset: 0,
     limit: 20,
     page: 0,
   });
+  const [apiUrl, setApiUrl] = useState(
+    `https://pokeapi.co/api/v2/pokemon?offset=${metaPokemonList.offset}&limit=${metaPokemonList.limit}`
+  );
   const [isLoadingTable, setIsLoadingTable] = useState(false);
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -59,10 +61,14 @@ export default function Home() {
     }
   };
 
+  // useEffect(() => {
+  //   setIsLoadingTable(true);
+  //   getAllPokemon(apiUrl);
+  // }, [apiUrl]);
   useEffect(() => {
     setIsLoadingTable(true);
     getAllPokemon(apiUrl);
-  }, [apiUrl]);
+  }, [metaPokemonList.page]);
   const pokemonColumns = {
     name: 'Name',
     url: 'URL',
@@ -89,28 +95,20 @@ export default function Home() {
     },
     onChangePage: async (currentPage) => {
       await dispatch(setPokemonList([]));
-      const offset = currentPage * 20;
-      const limit = 20;
-      await setMetaPokemonList({
-        ...metaPokemonList,
-        offset: offset,
-        limit: limit,
-        page: currentPage,
-      });
-      // );
+      const limit = metaPokemonList.limit;
+      const offset = currentPage * limit;
       await setApiUrl(
         `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`
       );
-      console.log('ini page', offset, limit);
+      await setMetaPokemonList({
+        ...metaPokemonList,
+        offset: offset,
+        page: currentPage,
+      });
     },
-    // onRowClick: (rowData, rowMeta) => {
-    //   if (listPermission.inpatientDetail === 'displayed') {
-    //     router.push(
-    //       '/inpatient/detail/[id]',
-    //       `/inpatient/detail/${rowData[10]}`
-    //     );
-    //   }
-    // },
+    onRowClick: (rowData, rowMeta) => {
+      props.history.replace(`/detail/${rowData[0]}`);
+    },
     selectableRows: 'none',
   };
   return (
