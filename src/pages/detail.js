@@ -102,12 +102,14 @@ export default function Detail(props) {
               >
                 <Card raised={true} style={{ padding: '30px 15px' }}>
                   <img
-                    src={
-                      pokemon.sprites.other['official-artwork']['front_default']
-                    }
+                    // src={
+                    //   pokemon.sprites.other['official-artwork']['front_default']
+                    // }
+                    src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png`}
                     alt='loading...'
                     style={{
                       height: 250,
+                      width: 'auto',
                       margin: '10px',
                       borderBottom: 'solid 1px rgba(0,0,0,0.25)',
                     }}

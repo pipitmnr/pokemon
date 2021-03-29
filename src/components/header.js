@@ -1,6 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { AppBar, Toolbar, Button } from '@material-ui/core';
+import logoPokemon from '../assets/logoPokemon.png';
 
 export default function Header({ name }) {
   const history = useHistory();
@@ -11,9 +12,9 @@ export default function Header({ name }) {
         <Toolbar style={{ position: 'relative', padding: 0, margin: '0 24px' }}>
           <div style={{ margin: '10px 0' }}>
             <img
-              src='https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/International_Pok%C3%A9mon_logo.svg/1024px-International_Pok%C3%A9mon_logo.svg.png'
+              src={logoPokemon}
               alt=''
-              style={{ height: 50, cursor: 'pointer' }}
+              style={{ height: '5vh', cursor: 'pointer', width: 'auto' }}
               onClick={() => history.push('/')}
             />
           </div>
@@ -22,7 +23,6 @@ export default function Header({ name }) {
               <Button
                 style={{
                   color: '#3c5aa6',
-                  marginLeft: '10px',
                   borderBottom: '1px solid',
                 }}
                 onClick={() => history.push('/')}
@@ -33,7 +33,6 @@ export default function Header({ name }) {
               <Button
                 style={{
                   color: '#3c5aa6',
-                  marginLeft: '10px',
                 }}
                 onClick={() => history.push('/')}
               >
@@ -44,7 +43,7 @@ export default function Header({ name }) {
               <Button
                 style={{
                   color: '#3c5aa6',
-                  marginLeft: '10px',
+                  marginLeft: '6px',
                   borderBottom: '1px solid',
                 }}
                 onClick={() => history.push('/my-pokemon-list')}
@@ -55,7 +54,7 @@ export default function Header({ name }) {
               <Button
                 style={{
                   color: '#3c5aa6',
-                  marginLeft: '10px',
+                  marginLeft: '6px',
                 }}
                 onClick={() => history.push('/my-pokemon-list')}
               >

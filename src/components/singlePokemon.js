@@ -87,7 +87,7 @@ export default function SinglePokemon({ id, name, nickname, removePokemon }) {
             <img
               src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${id}.svg`}
               alt=''
-              style={{ height: 80, margin: '10px' }}
+              style={{ height: 80, margin: '10px', width: 'auto' }}
             />
             <Typography>
               <h3>{name}</h3>
