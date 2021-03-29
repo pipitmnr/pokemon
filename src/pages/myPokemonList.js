@@ -27,7 +27,7 @@ export default function MyPokemonList(props) {
   const [metaMyPokemonList, setMetaMyPokemonList] = useState({
     count: 0,
     offset: 0,
-    limit: 2,
+    limit: 12,
     page: 0,
   });
   const [isLoading, setIsLoading] = useState(true);
