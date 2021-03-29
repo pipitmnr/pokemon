@@ -12,14 +12,7 @@ const initialState = {
     url: '',
   },
   pokemonList: [],
-  // metaPokemonList: {
-  //   count: 0,
-  //   next: '',
-  //   previous: '',
-  //   offset: 0,
-  //   limit: 20,
-  //   page: 0,
-  // },
+  myPokemonList: [],
   metaPokemonSearch: {
     offset: 1,
     limit: 20,
@@ -61,16 +54,16 @@ const PokemonReducer = (state = initialState, action) => {
         ...state,
         pokemonList: action.payload,
       };
+    case ActionType.SET_MY_POKEMON_LIST:
+      return {
+        ...state,
+        myPokemonList: action.payload,
+      };
     case ActionType.SET_POKEMON_ID:
       return {
         ...state,
         pokemonID: action.payload,
       };
-    // case ActionType.SET_META_POKEMON_LIST:
-    //   return {
-    //     ...state,
-    //     metaPokemonList: action.payload,
-    //   };
     case ActionType.SET_META_POKEMON_SEARCH:
       return {
         ...state,

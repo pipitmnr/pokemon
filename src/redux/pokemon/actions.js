@@ -3,8 +3,8 @@ export const ActionType = {
   SET_DATA_POKEMON: 'SET_DATA_POKEMON',
   CLEAR_DATA_POKEMON: 'CLEAR_DATA_POKEMON',
   SET_POKEMON_LIST: 'SET_POKEMON_LIST',
+  SET_MY_POKEMON_LIST: 'SET_MY_POKEMON_LIST',
   SET_POKEMON_ID: 'SET_POKEMON_ID',
-  // SET_META_POKEMON_LIST: 'SET_META_POKEMON_LIST',
   SET_COUNT_POKEMON: 'SET_COUNT_POKEMON',
   SET_META_POKEMON_SEARCH: 'SET_META_POKEMON_SEARCH',
   SET_ERROR_POKEMON: 'SET_ERROR_POKEMON',
@@ -29,15 +29,15 @@ const setPokemonList = (payload) => ({
   payload: payload,
 });
 
+const setMyPokemonList = (payload) => ({
+  type: ActionType.SET_MY_POKEMON_LIST,
+  payload: payload,
+});
+
 const setPokemonID = (payload) => ({
   type: ActionType.SET_POKEMON_ID,
   payload: payload,
 });
-
-// const setMetaPokemonList = (payload) => ({
-//   type: ActionType.SET_META_POKEMON_LIST,
-//   payload: payload,
-// });
 
 const setCountPokemon = (payload) => ({
   type: ActionType.SET_COUNT_POKEMON,
@@ -59,8 +59,8 @@ const PokemonActions = {
   clearDataPokemon,
   clearErrorPokemon,
   setPokemonList,
+  setMyPokemonList,
   setPokemonID,
-  // setMetaPokemonList,
   setCountPokemon,
   setMetaPokemonSearch,
   setErrorPokemon,

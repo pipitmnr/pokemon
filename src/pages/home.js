@@ -1,133 +1,98 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { CircularProgress, Container } from '@material-ui/core';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
+import {
+  CircularProgress,
+  Container,
+  Grid,
+  TablePagination,
+} from '@material-ui/core';
 
 import Header from '../components/header';
-import Table from '../components/table';
-// import SinglePokemon from '../components/singlePokemon';
-import { columns } from '../components/columns';
+import SinglePokemon from '../components/singlePokemon';
 
 import PokemonActions from '../redux/pokemon/actions';
 import { getPokemonList } from '../helper/api/pokemon';
 
-const useStyles = makeStyles((theme) =>
-  createStyles({
-    emptyTitle: {
-      [theme.breakpoints.down('sm')]: {
-        marginBottom: 20,
-      },
-    },
-  })
-);
-
-const {
-  // setDataPokemon,
-  // clearDataPokemon,
-  // clearErrorPokemon,
-  setPokemonList,
-  // setPokemonID,
-} = PokemonActions;
+const { setPokemonList } = PokemonActions;
 
 export default function Home(props) {
   const [metaPokemonList, setMetaPokemonList] = useState({
     count: 0,
     offset: 0,
-    limit: 20,
+    limit: 12,
     page: 0,
   });
   const [apiUrl, setApiUrl] = useState(
     `https://pokeapi.co/api/v2/pokemon?offset=${metaPokemonList.offset}&limit=${metaPokemonList.limit}`
   );
-  const [isLoadingTable, setIsLoadingTable] = useState(false);
-  const classes = useStyles();
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const { pokemonList } = useSelector((state) => state.Pokemon);
 
   const getAllPokemon = async (url) => {
     const pokemons = await getPokemonList(url);
     if (pokemons.results) {
-      dispatch(setPokemonList(pokemons.results));
+      const pokemonNewList = pokemons.results.map((pokemon) => {
+        const id = pokemon.url
+          .split('https://pokeapi.co/api/v2/pokemon/')[1]
+          .replace('/', '');
+        return { ...pokemon, id: id };
+      });
+      dispatch(setPokemonList(pokemonNewList));
       setMetaPokemonList({
         ...metaPokemonList,
         count: pokemons.count,
       });
-      if (!pokemons.results.length) {
-        setIsLoadingTable(false);
-      }
+      setIsLoading(false);
     } else {
-      setIsLoadingTable(false);
+      setIsLoading(false);
     }
   };
 
-  // useEffect(() => {
-  //   setIsLoadingTable(true);
-  //   getAllPokemon(apiUrl);
-  // }, [apiUrl]);
   useEffect(() => {
-    setIsLoadingTable(true);
+    setIsLoading(true);
     getAllPokemon(apiUrl);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [metaPokemonList.page]);
-  const pokemonColumns = {
-    name: 'Name',
-    url: 'URL',
-  };
-  const options = {
-    filter: false,
-    download: false,
-    print: false,
-    viewColumns: false,
-    search: false,
-    serverSide: true,
-    count: metaPokemonList.count,
-    page: metaPokemonList.page,
-    rowsPerPage: metaPokemonList.limit,
-    rowsPerPageOptions: [],
-    textLabels: {
-      body: {
-        noMatch: isLoadingTable ? (
-          <CircularProgress size={30} />
-        ) : (
-          <div className={classes.emptyTitle}>empty row</div>
-        ),
-      },
-    },
-    onChangePage: async (currentPage) => {
-      await dispatch(setPokemonList([]));
-      const limit = metaPokemonList.limit;
-      const offset = currentPage * limit;
-      await setApiUrl(
-        `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`
-      );
-      await setMetaPokemonList({
-        ...metaPokemonList,
-        offset: offset,
-        page: currentPage,
-      });
-    },
-    onRowClick: (rowData, rowMeta) => {
-      props.history.replace(`/detail/${rowData[0]}`);
-    },
-    selectableRows: 'none',
-  };
+
   return (
     <div>
-      <Header name='POKEMON' />
-      <Container style={{ marginTop: '40px' }}>
-        <Table
-          title={'Pokemon Go'}
-          data={pokemonList}
-          columns={columns(pokemonColumns)}
-          options={options}
-        />
+      <Header name='HOME' />
 
-        {/* grid with image */}
-        {/* <Grid container spacing={3}>
-          {pokemons.map((pokemon, index) => (
-            <SinglePokemon name={pokemon.name} image={pokemon.image} />
-          ))}
-        </Grid> */}
+      <Container style={{ marginTop: '40px' }}>
+        <h2 style={{ textAlign: 'left' }}>Pokemon List</h2>
+        {isLoading ? (
+          <CircularProgress size={30} />
+        ) : (
+          <React.Fragment>
+            <Grid container spacing={5}>
+              {pokemonList.map((pokemon, index) => (
+                <SinglePokemon id={pokemon.id} name={pokemon.name} />
+              ))}
+            </Grid>
+            <TablePagination
+              style={{ float: 'right', margin: '20px 0' }}
+              count={metaPokemonList.count}
+              page={metaPokemonList.page}
+              rowsPerPage={metaPokemonList.limit}
+              rowsPerPageOptions={[]}
+              onChangePage={async (event, currentPage) => {
+                setIsLoading(true);
+                const limit = metaPokemonList.limit;
+                const offset = currentPage * limit;
+                await setApiUrl(
+                  `https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`
+                );
+                await setMetaPokemonList({
+                  ...metaPokemonList,
+                  offset: offset,
+                  page: currentPage,
+                });
+              }}
+            />
+          </React.Fragment>
+        )}
       </Container>
     </div>
   );
