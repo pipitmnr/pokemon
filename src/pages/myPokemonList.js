@@ -8,6 +8,7 @@ import {
   Grid,
   TablePagination,
   Snackbar,
+  Typography,
 } from '@material-ui/core';
 import MuiAlert from '@material-ui/lab/Alert';
 
@@ -57,6 +58,9 @@ export default function MyPokemonList(props) {
         ...metaMyPokemonList,
         count: pokemonListFromLS.length,
       });
+      if (!pokemonListFromLS.length) {
+        setIsLoading(false);
+      }
     } else {
       setIsLoading(false);
     }
@@ -82,6 +86,8 @@ export default function MyPokemonList(props) {
         <h2 style={{ textAlign: 'left' }}>My Pokemon List</h2>
         {isLoading ? (
           <CircularProgress size={30} />
+        ) : !pokemonListFromLS || !pokemonListFromLS.length ? (
+          <Typography>No pokemon caught yet</Typography>
         ) : (
           <React.Fragment>
             <Grid container spacing={5}>
