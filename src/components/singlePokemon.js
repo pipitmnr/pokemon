@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   Typography,
@@ -24,6 +24,7 @@ export default function SinglePokemon({ id, name, nickname, removePokemon }) {
   const [openDialog, setOpenDialog] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
+  useEffect(() => {}, [openSnackbar]);
   return (
     <React.Fragment>
       <Snackbar

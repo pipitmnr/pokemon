@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 import {
   CircularProgress,
@@ -22,11 +23,11 @@ function Alert(props) {
 
 export default function MyPokemonList(props) {
   const pokemonListFromLS = JSON.parse(localStorage.getItem('myPokemon'));
-
+  const history = useHistory();
   const [metaMyPokemonList, setMetaMyPokemonList] = useState({
     count: 0,
     offset: 0,
-    limit: 12,
+    limit: 2,
     page: 0,
   });
   const [isLoading, setIsLoading] = useState(true);
@@ -43,6 +44,9 @@ export default function MyPokemonList(props) {
       ...metaMyPokemonList,
       count: pokemonListToLS.length,
     });
+    if (pokemonListToLS.length % metaMyPokemonList.limit === 0) {
+      history.go(0);
+    }
   };
 
   useEffect(() => {
